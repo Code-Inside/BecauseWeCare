@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Code-Inside // hub: @ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        body {
+            padding-top: 180px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </a><a class="brand" href="@Url.Action("Index", "Home")">
+                    Because we care...</a>
+                <ul class="nav" style="margin-left: 300px">
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        @RenderBody()
+        <br />
+        <!-- Footer
+            ================================================== -->
+        <footer class="footer">
+            <p>
+                &copy; @DateTime.Now.Year - Code-Inside <br/>
+                Source Code available <a href="https://github.com/Code-Inside/Web">@@GitHub</a>
+                <br />
+                Based on <a href="http://talkslab.github.com/metro-bootstrap/">MetroBootstrap</a> from <a href="http://twitter.com/talkslab" target="_blank">talkslab</a>.
+            </p>
+        </footer>
+    </div>
+    
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

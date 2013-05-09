@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>UserVoice</id>
+    <version>0.0.3</version>
+    <title>UserVoice</title>
+    <authors>Raimo Tuisku</authors>
+    <owners>Raimo Tuisku</owners>
+    <licenseUrl>http://github.com/uservoice/uservoice-csharp/MIT-LICENCE</licenseUrl>
+    <projectUrl>http://github.com/uservoice/uservoice-csharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C# library for UserVoice API Connections</description>
+    <releaseNotes>Initial version</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <language />
+    <tags>UserVoice SSO API</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="4.5.10" />
+      <dependency id="RestSharp" version="104.1" />
+    </dependencies>
+    <references>
+      <reference file="UserVoice.dll" />
+    </references>
+  </metadata>
+</package>
