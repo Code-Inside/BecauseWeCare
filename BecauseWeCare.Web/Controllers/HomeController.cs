@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BecauseWeCare.Web.Indexes;
+using BecauseWeCare.Web.Models;
+using Raven.Abstractions.Data;
+using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Indexes;
 
 namespace BecauseWeCare.Web.Controllers
 {
@@ -10,21 +16,29 @@ namespace BecauseWeCare.Web.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+            using (var documentStore = new DocumentStore { Url = "http://localhost:8080/", DefaultDatabase = "msftuservoice" })
+            {
+                documentStore.Initialize();
 
-            return View();
-        }
+                IndexCreation.CreateIndexes(typeof(ByCategoryIndex).Assembly, documentStore);
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your app description page.";
+               using(var session = documentStore.OpenSession())
+               {
+                   RavenQueryStatistics totalStats;
+                   var resultTotal = session.Query<Suggestion>().
+                       Statistics(out totalStats).
+                       ToArray();
 
-            return View();
-        }
+                   ViewBag.Total = totalStats.TotalResults;
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
+                   RavenQueryStatistics byCategoryStats;
+                   var resultByCategory = session.Query<ByCategoryIndex.ByCategoryResult, ByCategoryIndex>().ToList();
+
+
+                   string foobar = resultByCategory.ToString();
+               }
+            }
+
 
             return View();
         }

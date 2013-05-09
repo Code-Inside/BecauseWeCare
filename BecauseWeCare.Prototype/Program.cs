@@ -22,26 +22,26 @@ namespace BecauseWeCare.Prototype
             site.Subdomain = "wpdev";
             site.Url = "http://wpdev.uservoice.com/forums/110705-dev-platform";
 
-            SyncUserVoiceSiteToRavenDb(site, "http://localhost:8080/databases/feedbacks");
+            SyncUserVoiceSiteToRavenDb(site, "http://localhost:8080/", "msftuservoice");
 
         }
 
-        public static void SyncUserVoiceSiteToRavenDb(Site site, string ravenDbServer)
+        public static void SyncUserVoiceSiteToRavenDb(Site site, string ravenDbServer, string database)
         {
-            Console.WriteLine("SyncUserVoiceSite started for UserVoiceSite {0} to RavenDbServer {1}", site.Name, ravenDbServer);
+            Console.WriteLine("SyncUserVoiceSite started for UserVoiceSite {0} to RavenDbServer {1}", site.Name, ravenDbServer + "@" + database);
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
             var client = new UserVoice.Client(site.Subdomain, API_KEY);
-
-            var suggestions = client.GetCollection("/api/v1/forums/" + site.Id + "/suggestions");
+            // for closed stuff we need the filter=closed (which is the only filter i can access ?? - otherwise just suggestions.json as endpoint
+            var suggestions = client.GetCollection("/api/v1/forums/" + site.Id + "/suggestions.json?filter=closed");
 
             var totalNumber = suggestions.Count;
 
             Console.WriteLine("Total suggestions: " + totalNumber);
 
-            using (var documentStore = new DocumentStore { Url = ravenDbServer })
+            using (var documentStore = new DocumentStore { Url = ravenDbServer, DefaultDatabase = database})
             {
                 documentStore.Initialize();
 
@@ -61,6 +61,7 @@ namespace BecauseWeCare.Prototype
                         Console.WriteLine("Completed {0}% (Counter: {1})", percentage, i);
 
                         var suggestionObject = suggestionJson.ToObject<Suggestion>();
+
                         suggestionObject.Site = site;
                         bulkInsert.Store(suggestionObject);
                         i++;
