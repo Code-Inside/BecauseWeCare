@@ -188,10 +188,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Indexes\ByCategoryIndex.cs" />
+    <Compile Include="Indexes\ByDateIndex.cs" />
+    <Compile Include="Indexes\ByStatusIndex.cs" />
+    <Compile Include="Models\ChartTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\UserVoiceJsonTypes.cs" />
   </ItemGroup>
@@ -319,6 +323,8 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />

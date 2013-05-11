@@ -22,6 +22,7 @@ namespace BecauseWeCare.Web.Indexes
             {
                 public string Name { get; set; }
                 public int Count { get; set; }
+                public string HexColor { get; set; }
             }
         }
 
@@ -32,7 +33,7 @@ namespace BecauseWeCare.Web.Indexes
                                  {
                                      CategoryName = suggestion.category.name ?? "",
                                      Count = 1,
-                                     States = new[] { new { Name = suggestion.status.name, Count = 1 } }
+                                     States = new[] { new { Name = suggestion.status.name, Count = 1, HexColor = suggestion.status.hex_color } },
                                  };
 
             Reduce = results => from result in results
@@ -45,7 +46,7 @@ namespace BecauseWeCare.Web.Indexes
                                         States = from status in g.SelectMany(x => x.States)
                                                  group status by status.Name
                                                      into gb
-                                                     select new { Name = gb.Key, Count = gb.Sum(x => x.Count) }
+                                                     select new { Name = gb.Key, Count = gb.Sum(x => x.Count), HexColor = gb.Select(x => x.HexColor).FirstOrDefault() }
                                     };
 
         }

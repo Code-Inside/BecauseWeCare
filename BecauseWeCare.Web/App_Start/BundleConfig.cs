@@ -13,7 +13,7 @@ namespace BecauseWeCare.Web
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include("~/Content/metro-bootstrap.css").Include("~/Content/font-awesome.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js", "~/Scripts/chart.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));

@@ -7,3 +7,100 @@
     <h1>Because we care!</h1>
     <p class="lead">Stats about Microsoft's UserVoice sites</p>
 </header>
+
+<div class="row">
+    <div class="span12">
+        <h2>By Day...</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span6">
+        <h2>By Category</h2>
+        <div id="categoryContainer" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    </div>
+    <div class="span6">
+        <h2>By Status</h2>
+        <canvas id="statusChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+@section scripts
+{
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            var categoryOptions = {
+                chart: {
+                    type: 'column'
+                },
+                xAxis: {
+                    categories: []
+                },
+                yAxis: {
+                    min: 0,
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
+                    }
+                },
+                legend: {
+                    align: 'right',
+                    x: -100,
+                    verticalAlign: 'top',
+                    y: 20,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        }
+                    }
+                },
+                series: []
+            };
+            
+            $.getJSON('@Url.HttpRouteUrl("DefaultApi", new { controller="Analytics" })', function (result) {
+                for (var i in result) {
+
+                    var category = result[i];
+
+                    categoryOptions.xAxis.categories.push(category.CategoryName);
+
+                    for (var statusCount = 0; statusCount < category.States.length; statusCount++) {
+                        var name = "";
+                        if (category.States[statusCount].Name == undefined) {
+                            name = "no category";
+                        }
+                        else {
+                            name = category.States[statusCount].Name;
+                        }
+                        
+                        if (categoryOptions.series.indexOf(name) !== -1) {
+                            alert("found");
+                        }
+
+                        var valueToPush = { }; // or "var valueToPush = new Object();" which is the same
+                        valueToPush["name"] = name;
+                        valueToPush["data"] = [5,4,5,6,7,8];
+                        categoryOptions.series.push(valueToPush);
+
+                    }
+                }
+
+                $('#categoryContainer').highcharts(categoryOptions);
+            });
+
+        });
+
+    </script>
+}
