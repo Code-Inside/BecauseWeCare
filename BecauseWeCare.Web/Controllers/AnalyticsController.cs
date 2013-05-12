@@ -12,7 +12,8 @@ namespace BecauseWeCare.Web.Controllers
 {
     public class AnalyticsController : ApiController
     {
-        public List<ByCategoryIndex.ByCategoryResult> GetByCategory()
+        [System.Web.Http.HttpGet]
+        public List<ByCategoryIndex.ByCategoryResult> ByCategory()
         {
             using (var documentStore = new DocumentStore { Url = "http://localhost:8080/", DefaultDatabase = "msftuservoice" })
             {
@@ -24,31 +25,70 @@ namespace BecauseWeCare.Web.Controllers
                 {
                     var resultByCategory = session.Query<ByCategoryIndex.ByCategoryResult, ByCategoryIndex>().ToList();
 
-                    var result = new ByCategoryWebResult();
-                    result.CategoryCountInStates = new List<KeyValuePair<string, List<int>>>();
+                    return resultByCategory;
+                }
+            }
+        }
 
+        [System.Web.Http.HttpGet]
+        public ByCategoryWithStatusResult ByCategoryWithStatus()
+        {
+            using (var documentStore = new DocumentStore { Url = "http://localhost:8080/", DefaultDatabase = "msftuservoice" })
+            {
+                documentStore.Initialize();
+
+                IndexCreation.CreateIndexes(typeof(ByCategoryIndex).Assembly, documentStore);
+
+                using (var session = documentStore.OpenSession())
+                {
+                    var resultByCategory = session.Query<ByCategoryIndex.ByCategoryResult, ByCategoryIndex>().ToList();
+
+                    var webResult = new ByCategoryWithStatusResult();
+                    webResult.StatuslistPerCategory = new List<KeyValuePair<string, List<int>>>();
+
+                    // Loop through each category to load all states
                     foreach(var byCategory in resultByCategory)
                     {
                         foreach(var state in byCategory.States)
                         {
-                            if (result.CategoryCountInStates.Any(x => x.Key == state.Name) == false)
+                            if (webResult.StatuslistPerCategory.Any(x => x.Key == state.Name) == false)
                             {
-                                result.CategoryCountInStates.Add(new KeyValuePair<string, List<int>>(state.Name, new List<int>()));
+                                webResult.StatuslistPerCategory.Add(new KeyValuePair<string, List<int>>(state.Name, new List<int>()));
                             }
                         }
                     }
 
-                    foreach (var categoryCountInStates in result.CategoryCountInStates)
+                    webResult.StatuslistPerCategory = webResult.StatuslistPerCategory.OrderBy(x => x.Key).ToList();
+
+                    // Loop again through each category and append "unused" states to create the correct diagram
+                    foreach (var byCategory in resultByCategory)
                     {
-                        foreach (var byCategoryResult in resultByCategory)
+                        var attachedStats = byCategory.States.ToList();
+
+                        foreach (var status in webResult.StatuslistPerCategory)
                         {
-                            foreach (var categoryStates in byCategoryResult.States)
+                            if(attachedStats.Any(x => x.Name == status.Key) == false)
                             {
+                                attachedStats.Add(new ByCategoryIndex.ByCategoryResult.StatusStats() { Count = 0, Name = status.Key});
                             }
                         }
+
+                        byCategory.States = attachedStats.OrderBy(x => x.Name).ToArray();
                     }
 
-                    return resultByCategory;
+                    // We need a list of States with the count from each category
+                        foreach (var byCategory in resultByCategory)
+                        {
+                            foreach (var statesFromCategory in byCategory.States)
+                            {
+                                var indexInAllStates = webResult.StatuslistPerCategory.FindIndex(x => x.Key == statesFromCategory.Name);
+                                webResult.StatuslistPerCategory[indexInAllStates].Value.Add(statesFromCategory.Count);
+                            }
+                        }
+
+                    webResult.Categories = resultByCategory.Select(x => x.CategoryName).ToList();
+
+                    return webResult;
                 }
             }
         }
