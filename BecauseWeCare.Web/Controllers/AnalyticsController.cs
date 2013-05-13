@@ -31,33 +31,33 @@ namespace BecauseWeCare.Web.Controllers
                     var resultByCategory = session.Query<ByCategoryIndex.ByCategoryResult, ByCategoryIndex>().ToList();
 
                     var webResult = new ByCategoryWithStatusResult();
-                   
-                    webResult.StatuslistPerCategory = new List<KeyValuePair<string, List<int>>>();
-                    
+
+                    webResult.PerStatusInsight = new List<AnalyticsStatus>();
+
                     // Loop through each category to load all states
                     foreach(var byCategory in resultByCategory)
                     {
                         foreach(var state in byCategory.States)
                         {
-                            if (webResult.StatuslistPerCategory.Any(x => x.Key == state.Name) == false)
+                            if (webResult.PerStatusInsight.Any(x => x.StatusName == state.Name) == false)
                             {
-                                webResult.StatuslistPerCategory.Add(new KeyValuePair<string, List<int>>(state.Name, new List<int>()));
+                                webResult.PerStatusInsight.Add(new AnalyticsStatus() { StatusName = state.Name, HexColor = state.HexColor, Count = new List<int>()} );
                             }
                         }
                     }
 
-                    webResult.StatuslistPerCategory = webResult.StatuslistPerCategory.OrderBy(x => x.Key).ToList();
+                    webResult.PerStatusInsight = webResult.PerStatusInsight.OrderBy(x => x.StatusName).ToList();
 
                     // Loop again through each category and append "unused" states to create the correct diagram
                     foreach (var byCategory in resultByCategory)
                     {
                         var attachedStats = byCategory.States.ToList();
 
-                        foreach (var status in webResult.StatuslistPerCategory)
+                        foreach (var status in webResult.PerStatusInsight)
                         {
-                            if(attachedStats.Any(x => x.Name == status.Key) == false)
+                            if(attachedStats.Any(x => x.Name == status.StatusName) == false)
                             {
-                                attachedStats.Add(new ByCategoryIndex.ByCategoryResult.StatusStats() { Count = 0, Name = status.Key});
+                                attachedStats.Add(new ByCategoryIndex.ByCategoryResult.StatusStats() { Count = 0, Name = status.StatusName});
                             }
                         }
 
@@ -69,8 +69,8 @@ namespace BecauseWeCare.Web.Controllers
                         {
                             foreach (var statesFromCategory in byCategory.States)
                             {
-                                var indexInAllStates = webResult.StatuslistPerCategory.FindIndex(x => x.Key == statesFromCategory.Name);
-                                webResult.StatuslistPerCategory[indexInAllStates].Value.Add(statesFromCategory.Count);
+                                var indexInAllStates = webResult.PerStatusInsight.FindIndex(x => x.StatusName == statesFromCategory.Name);
+                                webResult.PerStatusInsight[indexInAllStates].Count.Add(statesFromCategory.Count);
                             }
                         }
 

@@ -31,7 +31,7 @@ namespace BecauseWeCare.Web.Indexes
             Map = suggestions => from suggestion in suggestions
                                  select new
                                  {
-                                     CategoryName = suggestion.category.name ?? "",
+                                     CategoryName = suggestion.category.name ?? "no category",
                                      Count = 1,
                                      States = new[] { new { Name = suggestion.status.name, Count = 1, HexColor = suggestion.status.hex_color } },
                                  };

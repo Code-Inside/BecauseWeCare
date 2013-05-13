@@ -10,14 +10,15 @@
 
 <div class="row">
     <div class="span12">
-        <h2>By Day...</h2>
+        <h2>Categories</h2>
+        <div id="categoriesContainer" style="min-width: 800px; height: 600px; margin: 0 auto"></div>
     </div>
 </div>
 
 <div class="row">
     <div class="span12">
-        <h2>By Category with Status-Bars</h2>
-        <div id="categoryWithStatusContainer" style="min-width: 400px; height: 800px; margin: 0 auto"></div>
+        <h2>Categories with status insight</h2>
+        <div id="categoriesWithStatusInsightContainer" style="min-width: 400px; height: 800px; margin: 0 auto"></div>
     </div>
 </div>
 
@@ -28,8 +29,8 @@
         var WebApp = WebApp || {};
         WebApp.Controls = WebApp.Controls || {};
         WebApp.Controls.Charts = WebApp.Controls.Charts || { 
-            ByCategoryWithStats: function() {
-                var categoryOptions = {
+            StackedBarForByCategoriesWithStatus: function() {
+                var chartOptions = {
                     chart: {
                         type: 'column'
                     },
@@ -75,65 +76,80 @@
                     series: []
                 };
 
-                return categoryOptions;
+                return chartOptions;
+            },
+            PieForCategories: function () {
+                var chartOptions = {
+                    title: {
+                        text: 'Category Overview'
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Categories',
+                        data: []}]
+                };
+
+                return chartOptions;
             }
         };
 
         
         $(function () {
 
-            var categoryOptions = WebApp.Controls.Charts.ByCategoryWithStats();
-            
+            var stackedBarOptions = WebApp.Controls.Charts.StackedBarForByCategoriesWithStatus();
+            var pieOptions = WebApp.Controls.Charts.PieForCategories();
+
             $.getJSON('@Url.HttpRouteUrl("RpcApi", new { controller="Analytics", action="ByCategory" })', function (result) {
-                // categories for x-Axis
+                // categories for x-Axis & Pie
                 for (var xAxisI in result.CategoriesAndCount) {
                     var xAxiscategory = result.CategoriesAndCount[xAxisI].Key;
-                    categoryOptions.xAxis.categories.push(xAxiscategory);
+                    stackedBarOptions.xAxis.categories.push(xAxiscategory);
+                    
+                    var pieValueToPush = {};
+                    pieValueToPush["name"] = result.CategoriesAndCount[xAxisI].Key;
+                    pieValueToPush["y"] = result.CategoriesAndCount[xAxisI].Value;
+                    pieOptions.series[0].data.push(pieValueToPush);
+
                 }
 
                 // status entries
-                for (var i in result.StatuslistPerCategory) {
-                    var status = result.StatuslistPerCategory[i];
+                for (var i in result.PerStatusInsight) {
+                    var status = result.PerStatusInsight[i];
 
                     var name = "";
-                    if (status.Key == undefined) {
+                    if (status.StatusName == undefined) {
                         name = "no status";
                     }
                     else {
-                        name = status.Key;
+                        name = status.StatusName;
                     }
+                    
+                    var color = "";
+                    if (status.HexColor == undefined) {
+                        color = "#FFB302";
+                    }
+                    else {
+                        color = status.HexColor;
+                    }
+
 
                     var data = new Array();
 
-                    for (var dataI in status.Value) {
-                        data.push(status.Value[dataI]);
+                    for (var dataI in status.Count) {
+                        data.push(status.Count[dataI]);
                     }
 
                     var valueToPush = {}; 
                     valueToPush["name"] = name;
+                    valueToPush["color"] = color;
                     valueToPush["data"] = data;
-                    categoryOptions.series.push(valueToPush);
+                    stackedBarOptions.series.push(valueToPush);
 
-                    //if (status.Key != undefined) {
-
-                    //    var name = "";
-                    //    name = status.Key;
-
-                    //    var data = new Array();
-
-                    //    for (var dataI in status.Value) {
-                    //        data.push(status.Value[dataI]);
-                    //    }
-
-                    //    var valueToPush = { };
-                    //    valueToPush["name"] = name;
-                    //    valueToPush["data"] = data;
-                    //    categoryOptions.series.push(valueToPush);
-
-                    //}
                 }
 
-                $('#categoryWithStatusContainer').highcharts(categoryOptions);
+                $('#categoriesWithStatusInsightContainer').highcharts(stackedBarOptions);
+                $('#categoriesContainer').highcharts(pieOptions);
+
             });
 
         });
