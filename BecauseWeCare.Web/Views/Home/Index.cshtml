@@ -27,55 +27,62 @@
         
         var WebApp = WebApp || {};
         WebApp.Controls = WebApp.Controls || {};
-        WebApp.Controls.Charts = WebApp.Controls.Charts || {
+        WebApp.Controls.Charts = WebApp.Controls.Charts || { 
             ByCategoryWithStats: function() {
-                
+                var categoryOptions = {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Suggestions per Category with Status'
+                    },
+                    xAxis: {
+                        categories: []
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of Suggestions'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            }
+                        }
+                    },
+                    legend: {
+                        align: 'right',
+                        x: -100,
+                        verticalAlign: 'top',
+                        y: 20,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
+                        borderColor: '#CCC',
+                        borderWidth: 1,
+                        shadow: false
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                            }
+                        }
+                    },
+                    series: []
+                };
+
+                return categoryOptions;
             }
         };
 
-
-
         
         $(function () {
-            var categoryOptions = {
-                chart: {
-                    type: 'column'
-                },
-                xAxis: {
-                    categories: []
-                },
-                yAxis: {
-                    min: 0,
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        }
-                    }
-                },
-                legend: {
-                    align: 'right',
-                    x: -100,
-                    verticalAlign: 'top',
-                    y: 20,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
-                    borderColor: '#CCC',
-                    borderWidth: 1,
-                    shadow: false
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true,
-                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                        }
-                    }
-                },
-                series: []
-            };
+
+            var categoryOptions = WebApp.Controls.Charts.ByCategoryWithStats();
             
             $.getJSON('@Url.HttpRouteUrl("RpcApi", new { controller="Analytics", action="ByCategory" })', function (result) {
                 // categories for x-Axis
