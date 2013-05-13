@@ -12,28 +12,15 @@ namespace BecauseWeCare.Web.Controllers
 {
     public class AnalyticsController : ApiController
     {
-        [System.Web.Http.HttpGet]
-        public List<ByCategoryIndex.ByCategoryResult> ByCategory()
+        private static DocumentStore GetDocumentStore()
         {
-            using (var documentStore = new DocumentStore { Url = "http://localhost:8080/", DefaultDatabase = "msftuservoice" })
-            {
-                documentStore.Initialize();
-
-                IndexCreation.CreateIndexes(typeof(ByCategoryIndex).Assembly, documentStore);
-
-                using (var session = documentStore.OpenSession())
-                {
-                    var resultByCategory = session.Query<ByCategoryIndex.ByCategoryResult, ByCategoryIndex>().ToList();
-
-                    return resultByCategory;
-                }
-            }
+            return new DocumentStore() { Url = "http://localhost:8080/", DefaultDatabase = "msftuservoice" };
         }
 
         [System.Web.Http.HttpGet]
-        public ByCategoryWithStatusResult ByCategoryWithStatus()
+        public ByCategoryWithStatusResult ByCategory()
         {
-            using (var documentStore = new DocumentStore { Url = "http://localhost:8080/", DefaultDatabase = "msftuservoice" })
+            using (var documentStore = GetDocumentStore())
             {
                 documentStore.Initialize();
 
@@ -44,8 +31,9 @@ namespace BecauseWeCare.Web.Controllers
                     var resultByCategory = session.Query<ByCategoryIndex.ByCategoryResult, ByCategoryIndex>().ToList();
 
                     var webResult = new ByCategoryWithStatusResult();
+                   
                     webResult.StatuslistPerCategory = new List<KeyValuePair<string, List<int>>>();
-
+                    
                     // Loop through each category to load all states
                     foreach(var byCategory in resultByCategory)
                     {
@@ -86,7 +74,7 @@ namespace BecauseWeCare.Web.Controllers
                             }
                         }
 
-                    webResult.Categories = resultByCategory.Select(x => x.CategoryName).ToList();
+                    webResult.CategoriesAndCount = resultByCategory.Select(x => new KeyValuePair<string, int>(x.CategoryName, x.Count)).ToList();
 
                     return webResult;
                 }

@@ -7,7 +7,7 @@ namespace BecauseWeCare.Web.Models
 {
     public class ByCategoryWithStatusResult
     {
-        public List<string> Categories { get; set; }
+        public List<KeyValuePair<string, int>> CategoriesAndCount { get; set; }
         public List<KeyValuePair<string, List<int>>> StatuslistPerCategory { get; set; }
     }
 

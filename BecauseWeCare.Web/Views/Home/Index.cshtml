@@ -24,6 +24,18 @@
 @section scripts
 {
     <script language="javascript" type="text/javascript">
+        
+        var WebApp = WebApp || {};
+        WebApp.Controls = WebApp.Controls || {};
+        WebApp.Controls.Charts = WebApp.Controls.Charts || {
+            ByCategoryWithStats: function() {
+                
+            }
+        };
+
+
+
+        
         $(function () {
             var categoryOptions = {
                 chart: {
@@ -65,10 +77,10 @@
                 series: []
             };
             
-            $.getJSON('@Url.HttpRouteUrl("RpcApi", new { controller="Analytics", action="ByCategoryWithStatus" })', function (result) {
+            $.getJSON('@Url.HttpRouteUrl("RpcApi", new { controller="Analytics", action="ByCategory" })', function (result) {
                 // categories for x-Axis
-                for (var xAxisI in result.Categories) {
-                    var xAxiscategory = result.Categories[xAxisI];
+                for (var xAxisI in result.CategoriesAndCount) {
+                    var xAxiscategory = result.CategoriesAndCount[xAxisI].Key;
                     categoryOptions.xAxis.categories.push(xAxiscategory);
                 }
 
@@ -78,14 +90,14 @@
 
                     var name = "";
                     if (status.Key == undefined) {
-                        name = "no category";
+                        name = "no status";
                     }
                     else {
                         name = status.Key;
                     }
 
                     var data = new Array();
-                    
+
                     for (var dataI in status.Value) {
                         data.push(status.Value[dataI]);
                     }
@@ -94,6 +106,24 @@
                     valueToPush["name"] = name;
                     valueToPush["data"] = data;
                     categoryOptions.series.push(valueToPush);
+
+                    //if (status.Key != undefined) {
+
+                    //    var name = "";
+                    //    name = status.Key;
+
+                    //    var data = new Array();
+
+                    //    for (var dataI in status.Value) {
+                    //        data.push(status.Value[dataI]);
+                    //    }
+
+                    //    var valueToPush = { };
+                    //    valueToPush["name"] = name;
+                    //    valueToPush["data"] = data;
+                    //    categoryOptions.series.push(valueToPush);
+
+                    //}
                 }
 
                 $('#categoryWithStatusContainer').highcharts(categoryOptions);
