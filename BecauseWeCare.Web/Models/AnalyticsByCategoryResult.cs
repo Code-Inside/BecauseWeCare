@@ -5,7 +5,7 @@ using System.Web;
 
 namespace BecauseWeCare.Web.Models
 {
-    public class ByCategoryWithStatusResult
+    public class AnalyticsByCategoryResult
     {
         public List<KeyValuePair<string, int>> CategoriesAndCount { get; set; }
         public List<AnalyticsStatus> PerStatusInsight { get; set; }

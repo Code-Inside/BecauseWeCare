@@ -18,7 +18,7 @@ namespace BecauseWeCare.Web.Controllers
         }
 
         [System.Web.Http.HttpGet]
-        public ByCategoryWithStatusResult ByCategory()
+        public AnalyticsByCategoryResult ByCategory()
         {
             using (var documentStore = GetDocumentStore())
             {
@@ -30,7 +30,7 @@ namespace BecauseWeCare.Web.Controllers
                 {
                     var resultByCategory = session.Query<ByCategoryIndex.ByCategoryResult, ByCategoryIndex>().ToList();
 
-                    var webResult = new ByCategoryWithStatusResult();
+                    var webResult = new AnalyticsByCategoryResult();
 
                     webResult.PerStatusInsight = new List<AnalyticsStatus>();
 

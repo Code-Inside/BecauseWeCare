@@ -31,12 +31,11 @@ namespace BecauseWeCare.Web.Controllers
 
                    ViewBag.Total = totalStats.TotalResults;
 
-                   var resultByCategory = session.Query<ByCategoryIndex.ByCategoryResult, ByCategoryIndex>().ToList();
                    var resultByStats = session.Query<ByStatusIndex.ByStatusResult, ByStatusIndex>().ToList();
                    var resultByDate = session.Query<ByDateIndex.ByDateResult, ByDateIndex>().ToList();
 
 
-                   string foobar = resultByCategory.ToString();
+                   string foobar = resultByDate.ToString();
                }
             }
 

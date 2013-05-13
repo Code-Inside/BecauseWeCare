@@ -11,6 +11,7 @@ namespace BecauseWeCare.Web.Indexes
         {
             public string Date { get; set; }
             public int AddedAtThisDate { get; set; }
+            public DateTime ParsedDate { get; set; }
         }
 
         public ByDateIndex()
@@ -19,6 +20,7 @@ namespace BecauseWeCare.Web.Indexes
                                  select new
                                             {
                                                 Date = suggestion.created_at,
+                                                ParsedDate = DateTime.Parse(suggestion.created_at),
                                                 AddedAtThisDate = 1,
                                             };
 
@@ -28,6 +30,7 @@ namespace BecauseWeCare.Web.Indexes
                                 select new
                                            {
                                                Date = g.Key,
+                                               ParsedDate = DateTime.Parse(g.Key),
                                                AddedAtThisDate = g.Sum(x => x.AddedAtThisDate),
                                            };
 

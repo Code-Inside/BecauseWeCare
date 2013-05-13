@@ -196,7 +196,7 @@
     <Compile Include="Indexes\ByDateIndex.cs" />
     <Compile Include="Indexes\ByStatusIndex.cs" />
     <Compile Include="Models\AnalyticsStatus.cs" />
-    <Compile Include="Models\ByCategoryWithStatusResult.cs" />
+    <Compile Include="Models\AnalyticsByCategoryResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\UserVoiceJsonTypes.cs" />
   </ItemGroup>
