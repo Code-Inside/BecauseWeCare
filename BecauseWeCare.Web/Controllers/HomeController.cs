@@ -31,9 +31,10 @@ namespace BecauseWeCare.Web.Controllers
 
                    ViewBag.Total = totalStats.TotalResults;
 
-                   var resultByStats = session.Query<ByStatusIndex.ByStatusResult, ByStatusIndex>().ToList();
-                   var resultByDate = session.Query<ByDateIndex.ByDateResult, ByDateIndex>().ToList();
+                   RavenQueryStatistics dateStats;
+                   var resultByDate = session.Query<ByDateIndex.ByDateResult, ByDateIndex>().Statistics(out dateStats).ToList();
 
+                   var orderbyDate = resultByDate.OrderBy(x => x.ParsedDate).ToList();
 
                    string foobar = resultByDate.ToString();
                }

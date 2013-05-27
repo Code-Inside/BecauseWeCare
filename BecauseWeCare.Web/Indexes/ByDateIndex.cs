@@ -25,12 +25,12 @@ namespace BecauseWeCare.Web.Indexes
                                             };
 
             Reduce = results => from result in results
-                                group result by result.Date
+                                group result by new { month = result.ParsedDate.Month, year = result.ParsedDate.Year }
                                 into g
                                 select new
                                            {
-                                               Date = g.Key,
-                                               ParsedDate = DateTime.Parse(g.Key),
+                                               Date = new DateTime(g.Key.year, g.Key.month, 1),
+                                               ParsedDate = new DateTime(g.Key.year, g.Key.month, 1),
                                                AddedAtThisDate = g.Sum(x => x.AddedAtThisDate),
                                            };
 
