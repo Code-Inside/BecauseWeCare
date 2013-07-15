@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BecauseWeCare.Prototype", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BecauseWeCare.Web", "BecauseWeCare.Web\BecauseWeCare.Web.csproj", "{E6FBFCF1-9FCA-4739-8E47-116E51A2DFB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BecauseWeCare.Importer", "BecauseWeCare.Importer\BecauseWeCare.Importer.csproj", "{B5525F02-C1FF-4742-BFE4-E87B376D0E4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BecauseWeCare.Model", "BecauseWeCare.Model\BecauseWeCare.Model.csproj", "{BA13D419-A841-4738-B2AD-A32FB83C7CC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{E6FBFCF1-9FCA-4739-8E47-116E51A2DFB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6FBFCF1-9FCA-4739-8E47-116E51A2DFB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6FBFCF1-9FCA-4739-8E47-116E51A2DFB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5525F02-C1FF-4742-BFE4-E87B376D0E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5525F02-C1FF-4742-BFE4-E87B376D0E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5525F02-C1FF-4742-BFE4-E87B376D0E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5525F02-C1FF-4742-BFE4-E87B376D0E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA13D419-A841-4738-B2AD-A32FB83C7CC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA13D419-A841-4738-B2AD-A32FB83C7CC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA13D419-A841-4738-B2AD-A32FB83C7CC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA13D419-A841-4738-B2AD-A32FB83C7CC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -22,8 +22,13 @@ namespace BecauseWeCare.Prototype
             site.Subdomain = "wpdev";
             site.Url = "http://wpdev.uservoice.com/forums/110705-dev-platform";
 
-            SyncUserVoiceSiteToRavenDb(site, "http://localhost:8080/", "msftuservoice");
+            Site aspnet = new Site();
+            aspnet.Id = "41199";
+            aspnet.Name = "General ASP.NET";
+            aspnet.Topic = "ASP.NET";
+            aspnet.Url = "http://aspnet.uservoice.com/forums/41199-general-asp-net";
 
+            SyncUserVoiceSiteToRavenDb(site, "http://localhost:8080/", "msftuservoice");
         }
 
         public static void SyncUserVoiceSiteToRavenDb(Site site, string ravenDbServer, string database)
@@ -33,7 +38,7 @@ namespace BecauseWeCare.Prototype
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
-            var client = new UserVoice.Client(site.Subdomain, API_KEY);
+            var client = new UserVoice.Client(site.Subdomain, "", apiSecret: "");
             // for closed stuff we need the filter=closed (which is the only filter i can access ?? - otherwise just suggestions.json as endpoint
             var suggestions = client.GetCollection("/api/v1/forums/" + site.Id + "/suggestions.json?filter=closed");
 

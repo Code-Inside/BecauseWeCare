@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace BecauseWeCare.Prototype
+namespace BecauseWeCare.Model
 {
     public class Forum
     {
@@ -87,15 +83,6 @@ namespace BecauseWeCare.Prototype
         public string updated_at { get; set; }
     }
 
-    public class Site
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Url { get; set; }
-        public string Subdomain { get; set; }
-        public string Topic{ get; set; }
-    }
-
     public class Suggestion
     {
         public string url { get; set; }
@@ -119,6 +106,7 @@ namespace BecauseWeCare.Prototype
         public List<object> attachments { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set; }
-        public Site Site { get; set; }
+
+        public string UserVoiceSiteId { get; set; }
     }
 }
